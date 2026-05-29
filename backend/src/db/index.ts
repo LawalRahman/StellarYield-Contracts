@@ -30,7 +30,9 @@ process.on("SIGTERM", async () => {
 });
 
 // Validate on startup — exit immediately if DATABASE_URL is unreachable
-validateConnection().catch((err) => {
-  logger.error(err, "Failed to connect to database");
-  process.exit(1);
-});
+if (process.env["NODE_ENV"] !== "test") {
+  validateConnection().catch((err) => {
+    logger.error(err, "Failed to connect to database");
+    process.exit(1);
+  });
+}
